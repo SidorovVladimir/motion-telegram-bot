@@ -1,0 +1,28 @@
+{
+  "name": "motion-telegram-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SidorovVladimir/motion-telegram-bot.git"
+  },
+  "keywords": [],
+  "author": "Vladimir Sidorov - v.sidorov29091988@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SidorovVladimir/motion-telegram-bot/issues"
+  },
+  "homepage": "https://github.com/SidorovVladimir/motion-telegram-bot#readme",
+  "dependencies": {
+    "@techstark/opencv-js": "^4.11.0-release.1",
+    "canvas": "^3.1.2",
+    "dotenv": "^17.0.0",
+    "fluent-ffmpeg": "^2.1.3",
+    "grammy": "^1.36.3"
+  }
+}
