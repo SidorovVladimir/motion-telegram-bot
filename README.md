@@ -7,8 +7,8 @@ Telegram bot for detecting camera motion and sending notifications.
 - ✅ Gets frames from the camera via FFmpeg
 - ✅ Uses OpenCV for motion detection
 - ✅ Sends notifications to Telegram:
-- 📸 Photo when motion is detected
-- 🎥 10-second video when triggered
+  - 📸 Photo when motion is detected
+  - 🎥 10-second video when triggered
 - ✅ Command `/photo` — get the current frame
 - ✅ Command `/record` — get 10-second video
 
@@ -33,11 +33,8 @@ npm install
 
 ```env
 BOT_TOKEN=your bot token
-USER_ID=your telegram user id
 RTSP_URL=rtsp://login:password@ip:port/stream=0
 ```
-
-- USER_ID can be obtained from [@userinfobot](https://t.me/userinfobot) - Just write him `/start` or any message - he will send you your ID.
 
 ## 🚀 Launch
 
@@ -49,13 +46,14 @@ node src/index.js
 
 ## 📱 Telegram Commands
 
-| Command   | Description                        |
-| --------- | ---------------------------------- |
-| `/start`  | Enables tracking                   |
-| `/stop`   | Disables tracking                  |
-| `/photo`  | Get the last frame from the camera |
-| `/record` | Record and send a 10-second video  |
-| `/status` | Shows the system status            |
+| Command     | Description                         |
+| ----------- | ----------------------------------- |
+| `/start`    | Enables tracking and notifications  |
+| `/stop`     | Disables tracking and notifications |
+| `/photo`    | Get the last frame from the camera  |
+| `/record`   | Record and send a 10-second video   |
+| `/status`   | Shows the system status             |
+| `/settings` | Сamera settings                     |
 
 ## 🧠 How does it work?
 

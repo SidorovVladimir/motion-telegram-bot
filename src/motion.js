@@ -1,8 +1,4 @@
-import {
-  motionNotificationsEnabled,
-  lastMotionTime,
-  setLastMotionTime,
-} from './state.js';
+import { lastMotionTime, setLastMotionTime } from './state.js';
 import {
   captureFrameBuffer,
   captureVideoBuffer,
@@ -17,10 +13,6 @@ const minAlertInterval = 60000;
 
 // === Функция уведомлений обнаружения движения ===
 export async function handleMotionDetected(bot, rtspUrl) {
-  if (!motionNotificationsEnabled) {
-    return;
-  }
-
   const now = Date.now();
   if (now - lastAlertTime < minAlertInterval) {
     console.log('⏳ Уведомления временно заблокированы из-за интервала');

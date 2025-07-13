@@ -2,7 +2,7 @@ import { spawn } from 'child_process';
 import ffmpeg from 'fluent-ffmpeg';
 import { InputFile } from 'grammy';
 import { isJPEG } from './utils/index.js';
-import { userId } from './index.js';
+import { userId } from './state.js';
 
 export const captureFrameBuffer = async (rtspUrl) => {
   return new Promise((resolve, reject) => {

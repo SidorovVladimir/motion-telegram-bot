@@ -5,18 +5,13 @@ import { createCanvas, loadImage } from 'canvas';
 import setupBot from './bot.js';
 import { handleMotionDetected } from './motion.js';
 import { captureFrameBuffer } from './camera.js';
-
-// === Периодичность проверки движения (в мс) ===
-const motionCheckInterval = 5000;
+import { motionNotificationsEnabled, motionCheckInterval } from './state.js';
 
 // === Обнаружение движения ===
 let prevGray = null;
 
 // === Получение токена бота из переменной окружения ===
 const token = process.env.BOT_TOKEN;
-
-// === Получение айди пользователя из переменной окружения ===
-export const userId = +process.env.USER_ID;
 
 // === Получение урл rtsp камеры из переменной окружения ===
 const rtspUrl = process.env.RTSP_URL;
@@ -32,11 +27,12 @@ console.log('✅ OpenCV загружен!');
 
 // === Команды бота ===
 bot.api.setMyCommands([
-  { command: 'start', description: 'Включает слежение' },
-  { command: 'stop', description: 'Отключает слежение' },
+  { command: 'start', description: 'Включает слежение и уведомление' },
+  { command: 'stop', description: 'Отключает слежение и уведомление' },
   { command: 'photo', description: 'Cнимок камеры' },
   { command: 'record', description: 'Запись (10 сек)' },
   { command: 'status', description: 'Статус системы' },
+  { command: 'settings', description: 'Настройки камеры' },
 ]);
 
 // === Функция обнаружения движения ===
@@ -94,6 +90,9 @@ async function detectMotion(base64Image) {
 // === Функция фоновой проверки движения ===
 function startMotionDetection(rtspUrl, bot) {
   setInterval(async () => {
+    if (!motionNotificationsEnabled) {
+      return;
+    }
     console.log('📸 Проверяем на движение...');
     try {
       const buffer = await captureFrameBuffer(rtspUrl);

@@ -7,18 +7,26 @@ import {
   motionNotificationsEnabled,
   toggleNotifications,
   lastMotionTime,
+  motionCheckInterval,
+  setMotionCheckInterval,
 } from './state.js';
 import { captureFrame, captureVideoBuffer } from './camera.js';
+import { settingsMenu, backKeyboard, motionMenu } from './keyboards/index.js';
 
 export default (bot, rtspUrl) => {
   bot.command('start', async (ctx) => {
-    toggleNotifications(true);
-    await ctx.reply('✅ Слежение за движением включено');
+    const userId = ctx.from.id;
+    toggleNotifications(true, userId);
+    await ctx.reply(
+      '✅ Слежение за движением и подписка на уведомления включены'
+    );
   });
 
   bot.command('stop', async (ctx) => {
     toggleNotifications(false);
-    await ctx.reply('🛑 Слежение за движением остановлено');
+    await ctx.reply(
+      '🛑 Слежение за движением и подписка на уведомления отключены'
+    );
   });
 
   bot.command('photo', async (ctx) => {
@@ -72,6 +80,7 @@ export default (bot, rtspUrl) => {
     📊 Статус системы:
     🕒 Уведомления при движении: ${motionNotificationsEnabled ? 'ВКЛ' : 'ВЫКЛ'}
     ⏰ Последнее событие: ${lastMotionTime}
+    ⏰ Периодичность проверки движения: ${motionCheckInterval / 1000} сек. 
     `;
     await ctx.reply(statusText.trim());
   });
@@ -87,6 +96,42 @@ export default (bot, rtspUrl) => {
     } catch (err) {
       console.error('❌ Ошибка записи видео:', err.message || err);
       await ctx.reply('❌ Не удалось записать видео');
+    }
+  });
+
+  bot.command('settings', async (ctx) => {
+    await ctx.reply('Выберите пункт меню', {
+      reply_markup: settingsMenu,
+    });
+  });
+
+  bot.callbackQuery('check_motion', async (ctx) => {
+    await ctx.editMessageText('Выберите значения в секундах', {
+      reply_markup: motionMenu,
+    });
+    await ctx.answerCallbackQuery();
+  });
+
+  bot.on('callback_query:data', async (ctx) => {
+    setMotionCheckInterval(ctx.callbackQuery.data);
+    await ctx.reply(
+      `Периодичность проверки движения установлено в ${
+        ctx.callbackQuery.data / 1000
+      } сек.`
+    );
+    await ctx.answerCallbackQuery();
+  });
+
+  bot.catch((err) => {
+    const ctx = err.ctx;
+    console.error(`Ошибка при обработке обновления ${ctx.update.update_id}:`);
+    const e = err.error;
+    if (e instanceof GrammyError) {
+      console.error('Ошибка в запросе:', e.description);
+    } else if (e instanceof HttpError) {
+      console.error('Не удалось связаться с Telegram:', e);
+    } else {
+      console.error('Неизвестная ошибка:', e);
     }
   });
 };
